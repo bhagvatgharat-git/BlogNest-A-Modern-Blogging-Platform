@@ -1,0 +1,27 @@
+{% if pagination.pages > 1 %}
+<nav class="pagination-nav" style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin: 3rem 0;">
+  {% if pagination.has_prev %}
+    <a href="{{ url_for(request.endpoint, page=pagination.prev_num, **request.args|rejectattr('page')|dict) if false else url_for(request.endpoint, page=pagination.prev_num, q=request.args.get('q'), category=request.args.get('category'), sort=request.args.get('sort'), tab=request.args.get('tab')) }}" class="btn btn-outline btn-sm">
+      &laquo; Previous
+    </a>
+  {% endif %}
+
+  {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+    {% if p %}
+      {% if p == pagination.page %}
+        <span class="btn btn-primary btn-sm" style="min-width: 38px;">{{ p }}</span>
+      {% else %}
+        <a href="{{ url_for(request.endpoint, page=p, q=request.args.get('q'), category=request.args.get('category'), sort=request.args.get('sort'), tab=request.args.get('tab')) }}" class="btn btn-outline btn-sm" style="min-width: 38px;">{{ p }}</a>
+      {% endif %}
+    {% else %}
+      <span style="color: var(--text-light); padding: 0 0.4rem;">...</span>
+    {% endif %}
+  {% endfor %}
+
+  {% if pagination.has_next %}
+    <a href="{{ url_for(request.endpoint, page=pagination.next_num, q=request.args.get('q'), category=request.args.get('category'), sort=request.args.get('sort'), tab=request.args.get('tab')) }}" class="btn btn-outline btn-sm">
+      Next &raquo;
+    </a>
+  {% endif %}
+</nav>
+{% endif %}

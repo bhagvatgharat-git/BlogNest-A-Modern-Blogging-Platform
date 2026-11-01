@@ -1,0 +1,55 @@
+<article class="blog-card" id="post-card-{{ post.id }}">
+  <div class="card-cover">
+    {% if post.cover_image %}
+      <img src="{{ post.cover_image }}" alt="{{ post.title }}" loading="lazy">
+    {% else %}
+      <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; background: linear-gradient(135deg, #e0f2fe, #bae6fd);">
+        📖
+      </div>
+    {% endif %}
+
+    {% if post.category %}
+      <a href="{{ url_for('main.explore', category=post.category.slug) }}" class="card-category-badge">
+        {{ post.category.name }}
+      </a>
+    {% endif %}
+
+    {% if not post.is_published %}
+      <span class="card-draft-badge">Draft</span>
+    {% endif %}
+  </div>
+
+  <div class="card-body">
+    <div class="card-meta-top">
+      <span>{{ post.created_at|format_date }}</span>
+      <span>•</span>
+      <span class="card-reading-time">⏱ {{ post.reading_time_minutes }} min read</span>
+    </div>
+
+    <h3 class="card-title">
+      <a href="{{ url_for('blog.post_detail', slug=post.slug) }}">{{ post.title }}</a>
+    </h3>
+
+    <p class="card-summary">
+      {{ post.summary or (post.content[:160] ~ '...') }}
+    </p>
+
+    <div class="card-footer">
+      <a href="{{ url_for('main.author_profile', username=post.author.username) }}" class="author-info">
+        <div class="author-avatar">
+          {% if post.author.avatar_url %}
+            <img src="{{ post.author.avatar_url }}" alt="{{ post.author.display_name }}">
+          {% else %}
+            {{ post.author.initials }}
+          {% endif %}
+        </div>
+        <span class="author-name">{{ post.author.display_name }}</span>
+      </a>
+
+      <div class="card-stats">
+        <span>👁 {{ post.views_count }}</span>
+        <span>💬 {{ post.comments_count }}</span>
+      </div>
+    </div>
+  </div>
+</article>

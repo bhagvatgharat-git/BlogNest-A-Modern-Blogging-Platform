@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}BlogNest – Modern Blogging Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-pill">
+      <span class="hero-pill-dot"></span>
+      Welcome to the Next-Gen Creator Nest
+    </div>
+    <h1 class="hero-title">
+      Where compelling stories &amp;<br>
+      <span class="highlight">modern ideas take flight.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Discover insightful writings, share your unique perspective, and connect with a community of forward-thinking creators.
+    </p>
+
+    <div class="hero-actions">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary btn-lg" id="heroWriteBtn">✍️ Write a Story</a>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline btn-lg" id="heroDashboardBtn">My Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg" id="heroGetStartedBtn">Get Started Free</a>
+        <a href="{{ url_for('main.explore') }}" class="btn btn-outline btn-lg" id="heroExploreBtn">Explore Stories</a>
+      {% endif %}
+    </div>
+
+    <!-- Community Stats Ribbon -->
+    <div class="stats-ribbon">
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.total_posts }}</div>
+        <div class="stat-label">Published Stories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.total_authors }}</div>
+        <div class="stat-label">Active Authors</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.total_categories }}</div>
+        <div class="stat-label">Topics Covered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Feed Section -->
+<div class="container" style="padding-bottom: 5rem;">
+  <!-- Category Filter Bar -->
+  <div class="category-filter-bar">
+    <a href="{{ url_for('main.index') }}" class="category-chip {% if not selected_category %}active{% endif %}">
+      🔥 All Stories
+    </a>
+    {% for cat in global_categories %}
+      <a href="{{ url_for('main.index', category=cat.slug) }}" class="category-chip {% if selected_category and selected_category.slug == cat.slug %}active{% endif %}">
+        {{ cat.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Featured Story Card (if no search or specific filter) -->
+  {% if featured_post and not selected_category and not search_query and pagination.page == 1 %}
+    <section style="margin-top: 1rem;">
+      <div class="featured-card">
+        <div class="featured-cover">
+          {% if featured_post.cover_image %}
+            <img src="{{ featured_post.cover_image }}" alt="{{ featured_post.title }}">
+          {% else %}
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; background: linear-gradient(135deg, #bae6fd, #7dd3fc);">
+              ✨
+            </div>
+          {% endif %}
+        </div>
+        <div class="featured-content">
+          <div class="featured-tag">
+            <span>⭐ Featured Post</span>
+            {% if featured_post.category %}
+              <span>•</span>
+              <span>{{ featured_post.category.name }}</span>
+            {% endif %}
+          </div>
+          <h2 class="featured-title">
+            <a href="{{ url_for('blog.post_detail', slug=featured_post.slug) }}">{{ featured_post.title }}</a>
+          </h2>
+          <p class="featured-summary">
+            {{ featured_post.summary or (featured_post.content[:220] ~ '...') }}
+          </p>
+          <div class="card-footer" style="padding-top: 0; border-top: none;">
+            <a href="{{ url_for('main.author_profile', username=featured_post.author.username) }}" class="author-info">
+              <div class="author-avatar">
+                {% if featured_post.author.avatar_url %}
+                  <img src="{{ featured_post.author.avatar_url }}" alt="{{ featured_post.author.display_name }}">
+                {% else %}
+                  {{ featured_post.author.initials }}
+                {% endif %}
+              </div>
+              <span class="author-name">{{ featured_post.author.display_name }}</span>
+            </a>
+            <span style="font-size: 0.85rem; color: var(--text-light);">⏱ {{ featured_post.reading_time_minutes }} min read</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Feed Header -->
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">
+        {% if selected_category %}
+          Topic: {{ selected_category.name }}
+        {% elif search_query %}
+          Search Results for "{{ search_query }}"
+        {% else %}
+          Latest Publications
+        {% endif %}
+      </h2>
+      <p class="section-subtitle">Curated modern articles crafted by passionate creators</p>
+    </div>
+    <a href="{{ url_for('main.explore') }}" class="btn btn-outline btn-sm">Browse All &rarr;</a>
+  </div>
+
+  <!-- Posts Grid -->
+  {% if posts %}
+    <div class="posts-grid">
+      {% for post in posts %}
+        {% include 'components/blog_card.html' %}
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% include 'components/pagination.html' %}
+  {% else %}
+    <div style="text-align: center; padding: 4rem 2rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px dashed var(--border-light); margin: 2rem 0;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+      <h3 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">No stories found</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Be the very first author to publish a story in this section!</p>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary">Create Your First Post</a>
+      {% else %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Join BlogNest Today</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

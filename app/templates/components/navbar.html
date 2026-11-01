@@ -1,0 +1,63 @@
+<header class="navbar">
+  <div class="container nav-container">
+    <!-- Brand -->
+    <a href="{{ url_for('main.index') }}" class="brand-logo" id="navBrandLogo">
+      <div class="brand-badge">🪶</div>
+      <div class="brand-text">Blog<span>Nest</span></div>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <ul class="nav-links">
+      <li><a href="{{ url_for('main.index') }}" class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">Home</a></li>
+      <li><a href="{{ url_for('main.explore') }}" class="nav-link {% if request.endpoint == 'main.explore' %}active{% endif %}">Explore</a></li>
+      <li><a href="{{ url_for('main.about') }}" class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}">About</a></li>
+    </ul>
+
+    <!-- Quick Search Input -->
+    <form action="{{ url_for('main.explore') }}" method="GET" class="nav-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" name="q" placeholder="Search stories..." value="{{ request.args.get('q', '') }}" aria-label="Search stories">
+    </form>
+
+    <!-- User Authentication Section -->
+    <div class="nav-auth">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary btn-sm" id="navWritePostBtn">
+          <span>✍️ Write</span>
+        </a>
+        <a href="{{ url_for('dashboard.index') }}" class="user-profile-pill" id="navUserProfilePill">
+          <div class="user-avatar-mini">
+            {% if current_user.avatar_url %}
+              <img src="{{ current_user.avatar_url }}" alt="{{ current_user.display_name }}">
+            {% else %}
+              {{ current_user.initials }}
+            {% endif %}
+          </div>
+          <span>{{ current_user.username }}</span>
+        </a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-sm" id="navLogoutBtn">Log out</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-sm" id="navLoginBtn">Log in</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm" id="navRegisterBtn">Get Started</a>
+      {% endif %}
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">☰</button>
+    </div>
+  </div>
+
+  <!-- Mobile Collapsible Menu -->
+  <div id="mobileMenu" style="display: none; flex-direction: column; padding: 1rem 1.5rem; background: #ffffff; border-top: 1px solid var(--border-light);">
+    <a href="{{ url_for('main.index') }}" class="nav-link" style="padding: 0.6rem 0;">Home</a>
+    <a href="{{ url_for('main.explore') }}" class="nav-link" style="padding: 0.6rem 0;">Explore</a>
+    <a href="{{ url_for('main.about') }}" class="nav-link" style="padding: 0.6rem 0;">About</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard.index') }}" class="nav-link" style="padding: 0.6rem 0;">My Dashboard</a>
+      <a href="{{ url_for('blog.create_post') }}" class="nav-link" style="padding: 0.6rem 0;">Write New Post</a>
+      <a href="{{ url_for('auth.logout') }}" class="nav-link" style="padding: 0.6rem 0; color: var(--danger);">Log out</a>
+    {% else %}
+      <a href="{{ url_for('auth.login') }}" class="nav-link" style="padding: 0.6rem 0;">Log in</a>
+      <a href="{{ url_for('auth.register') }}" class="nav-link" style="padding: 0.6rem 0; font-weight: 700; color: var(--primary-600);">Get Started</a>
+    {% endif %}
+  </div>
+</header>
