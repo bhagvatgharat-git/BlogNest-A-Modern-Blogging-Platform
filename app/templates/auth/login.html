@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Log In – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem;">
+  <div class="form-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="brand-badge" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.5rem;">
+        🔐
+      </div>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-dark);">Welcome Back</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+        Log in to publish articles, draft ideas, and manage your portfolio
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}">
+      <div class="form-group">
+        <label for="login_identifier" class="form-label">Username or Email</label>
+        <input 
+          type="text" 
+          id="login_identifier" 
+          name="login_identifier" 
+          class="form-control" 
+          placeholder="e.g. alex or alex@example.com" 
+          required 
+          autofocus
+        >
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <label for="password" class="form-label" style="margin-bottom: 0;">Password</label>
+        </div>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Enter your password" 
+          required
+        >
+      </div>
+
+      <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-medium); cursor: pointer;">
+          <input type="checkbox" name="remember" value="1">
+          <span>Remember me on this browser</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;" id="loginSubmitBtn">
+        Log In
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light); font-size: 0.92rem; color: var(--text-muted);">
+      Don't have an account yet? 
+      <a href="{{ url_for('auth.register') }}" style="font-weight: 700; color: var(--primary-600);">Create an account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem;">
+  <div class="form-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="brand-badge" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.5rem;">
+        ✨
+      </div>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-dark);">Join BlogNest</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+        Start publishing your stories, draft ideas, and build your readership today.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+      <div class="form-group">
+        <label for="full_name" class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          id="full_name" 
+          name="full_name" 
+          class="form-control" 
+          placeholder="e.g. John Doe"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="username" class="form-label">Username <span style="color: var(--danger);">*</span></label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          class="form-control" 
+          placeholder="e.g. johndoe" 
+          required 
+          minlength="3"
+        >
+        <small style="color: var(--text-light); font-size: 0.8rem; display: block; margin-top: 0.35rem;">
+          Must be at least 3 characters. This will be your public author handle.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address <span style="color: var(--danger);">*</span></label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          placeholder="john@example.com" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password <span style="color: var(--danger);">*</span></label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Minimum 6 characters" 
+          required 
+          minlength="6"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password" class="form-label">Confirm Password <span style="color: var(--danger);">*</span></label>
+        <input 
+          type="password" 
+          id="confirm_password" 
+          name="confirm_password" 
+          class="form-control" 
+          placeholder="Re-enter password" 
+          required 
+          minlength="6"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;" id="registerSubmitBtn">
+        Create Account
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light); font-size: 0.92rem; color: var(--text-muted);">
+      Already a member? 
+      <a href="{{ url_for('auth.login') }}" style="font-weight: 700; color: var(--primary-600);">Log in to your account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

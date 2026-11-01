@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile Settings – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem;">
+  <div class="form-card" style="max-width: 640px;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="author-card-avatar" style="margin: 0 auto 1rem; width: 84px; height: 84px; font-size: 2rem;">
+        {% if current_user.avatar_url %}
+          <img src="{{ current_user.avatar_url }}" alt="{{ current_user.display_name }}">
+        {% else %}
+          {{ current_user.initials }}
+        {% endif %}
+      </div>
+      <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--text-dark);">Edit Profile</h1>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">Update your author bio and public portfolio info</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.profile') }}">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" value="{{ current_user.username }}" disabled style="background: var(--bg-subtle); cursor: not-allowed;">
+        <small style="color: var(--text-light); font-size: 0.8rem;">Usernames cannot be changed.</small>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-control" value="{{ current_user.email }}" disabled style="background: var(--bg-subtle); cursor: not-allowed;">
+      </div>
+
+      <div class="form-group">
+        <label for="full_name" class="form-label">Display / Full Name</label>
+        <input type="text" id="full_name" name="full_name" class="form-control" value="{{ current_user.full_name or '' }}" placeholder="e.g. Jane Doe">
+      </div>
+
+      <div class="form-group">
+        <label for="avatar_url" class="form-label">Avatar Image URL (Optional)</label>
+        <input type="url" id="avatar_url" name="avatar_url" class="form-control" value="{{ current_user.avatar_url or '' }}" placeholder="https://images.unsplash.com/photo-...">
+        <small style="color: var(--text-light); font-size: 0.8rem;">Paste an image URL or Unsplash avatar.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="bio" class="form-label">Author Bio</label>
+        <textarea id="bio" name="bio" class="form-control" rows="4" placeholder="Tell readers about yourself, your expertise, and what topics you write about...">{{ current_user.bio or '' }}</textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
