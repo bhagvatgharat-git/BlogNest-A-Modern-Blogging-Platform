@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ author.display_name }} (@{{ author.username }}) – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem 5rem;">
+  <!-- Author Profile Banner -->
+  <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 3rem 2rem; box-shadow: var(--shadow-md); margin-bottom: 3rem; text-align: center;">
+    <div class="author-card-avatar" style="margin: 0 auto 1.25rem; width: 96px; height: 96px; font-size: 2.2rem; box-shadow: var(--shadow-lg);">
+      {% if author.avatar_url %}
+        <img src="{{ author.avatar_url }}" alt="{{ author.display_name }}">
+      {% else %}
+        {{ author.initials }}
+      {% endif %}
+    </div>
+
+    <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.25rem;">
+      {{ author.display_name }}
+    </h1>
+    <div style="color: var(--primary-600); font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+      @{{ author.username }}
+    </div>
+
+    <p style="color: var(--text-medium); font-size: 1.05rem; max-width: 650px; margin: 0 auto 1.5rem; line-height: 1.6;">
+      {{ author.bio or 'Author and thinker writing on BlogNest.' }}
+    </p>
+
+    <div style="display: flex; gap: 2rem; justify-content: center; color: var(--text-muted); font-size: 0.92rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem; max-width: 480px; margin: 0 auto;">
+      <div>
+        <strong style="color: var(--text-dark); font-size: 1.2rem; display: block;">{{ author.published_posts_count }}</strong>
+        <span>Stories</span>
+      </div>
+      <div>
+        <strong style="color: var(--text-dark); font-size: 1.2rem; display: block;">{{ author.total_views }}</strong>
+        <span>Total Reads</span>
+      </div>
+      <div>
+        <strong style="color: var(--text-dark); font-size: 1.2rem; display: block;">{{ author.total_comments_received }}</strong>
+        <span>Comments</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Author Stories Section -->
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Published Stories</h2>
+      <p class="section-subtitle">Articles written by {{ author.display_name }}</p>
+    </div>
+  </div>
+
+  {% if posts %}
+    <div class="posts-grid">
+      {% for post in posts %}
+        {% include 'components/blog_card.html' %}
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% include 'components/pagination.html' %}
+  {% else %}
+    <div style="text-align: center; padding: 4rem 2rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px dashed var(--border-light);">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">✍️</div>
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.5rem;">
+        No published stories yet
+      </h3>
+      <p style="color: var(--text-muted);">{{ author.display_name }} has not published any public articles yet.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

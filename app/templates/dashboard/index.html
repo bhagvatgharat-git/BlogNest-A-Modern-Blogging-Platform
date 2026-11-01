@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Author Dashboard – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2.5rem 1.5rem 5rem;">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.5rem;">
+    <div>
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-dark);">
+        Welcome, {{ current_user.display_name }}! 👋
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+        Track your writing performance, edit drafts, and publish new articles
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('auth.profile') }}" class="btn btn-outline btn-sm">
+        ⚙️ Edit Profile
+      </a>
+      <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary btn-sm" id="dashboardNewStoryBtn">
+        ✍️ New Story
+      </a>
+    </div>
+  </div>
+
+  <!-- Dashboard Analytics & Statistics Grid -->
+  <div class="dashboard-stats-grid" style="margin-top: 2rem;">
+    <div class="dash-stat-card">
+      <div class="dash-stat-icon">📚</div>
+      <div>
+        <div class="dash-stat-value">{{ stats.total_posts }}</div>
+        <div class="dash-stat-name">Total Stories</div>
+      </div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-icon" style="background: var(--success-bg); color: var(--success);">🚀</div>
+      <div>
+        <div class="dash-stat-value">{{ stats.published_posts }}</div>
+        <div class="dash-stat-name">Published</div>
+      </div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-icon" style="background: var(--warning-bg); color: var(--warning);">📝</div>
+      <div>
+        <div class="dash-stat-value">{{ stats.draft_posts }}</div>
+        <div class="dash-stat-name">Drafts</div>
+      </div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-icon" style="background: var(--primary-100); color: var(--primary-700);">👁️</div>
+      <div>
+        <div class="dash-stat-value">{{ stats.total_views }}</div>
+        <div class="dash-stat-name">Total Reads</div>
+      </div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-icon" style="background: #fdf2f8; color: #db2777;">💬</div>
+      <div>
+        <div class="dash-stat-value">{{ stats.comments_received }}</div>
+        <div class="dash-stat-name">Comments Received</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Filtering -->
+  <div class="dash-tabs">
+    <a href="{{ url_for('dashboard.index', tab='all') }}" class="dash-tab-link {% if current_tab == 'all' %}active{% endif %}">
+      All Stories ({{ stats.total_posts }})
+    </a>
+    <a href="{{ url_for('dashboard.index', tab='published') }}" class="dash-tab-link {% if current_tab == 'published' %}active{% endif %}">
+      Published ({{ stats.published_posts }})
+    </a>
+    <a href="{{ url_for('dashboard.index', tab='drafts') }}" class="dash-tab-link {% if current_tab == 'drafts' %}active{% endif %}">
+      Drafts ({{ stats.draft_posts }})
+    </a>
+  </div>
+
+  <!-- Posts Table / Management Card -->
+  <div class="table-card">
+    {% if posts %}
+      <div style="overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title &amp; Topic</th>
+              <th>Status</th>
+              <th>Reading Time</th>
+              <th>Views</th>
+              <th>Comments</th>
+              <th>Updated</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for post in posts %}
+              <tr>
+                <td style="max-width: 320px;">
+                  <a href="{{ url_for('blog.post_detail', slug=post.slug) }}" style="font-weight: 700; color: var(--text-dark); display: block; line-height: 1.35; margin-bottom: 0.25rem;">
+                    {{ post.title }}
+                  </a>
+                  {% if post.category %}
+                    <span style="font-size: 0.78rem; color: var(--primary-600); font-weight: 600;">
+                      #{{ post.category.name }}
+                    </span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if post.is_published %}
+                    <span class="badge-status badge-published">Published</span>
+                  {% else %}
+                    <span class="badge-status badge-draft">Draft</span>
+                  {% endif %}
+                </td>
+                <td style="color: var(--text-muted); font-size: 0.88rem;">
+                  ⏱ {{ post.reading_time_minutes }} min
+                </td>
+                <td style="font-weight: 600; color: var(--text-medium);">
+                  👁 {{ post.views_count }}
+                </td>
+                <td style="font-weight: 600; color: var(--text-medium);">
+                  💬 {{ post.comments_count }}
+                </td>
+                <td style="color: var(--text-light); font-size: 0.82rem;">
+                  {{ post.updated_at|format_date }}
+                </td>
+                <td style="text-align: right;">
+                  <div style="display: inline-flex; gap: 0.4rem;">
+                    <a href="{{ url_for('blog.post_detail', slug=post.slug) }}" class="btn btn-outline btn-sm" title="View Story">
+                      👁️
+                    </a>
+                    <a href="{{ url_for('blog.edit_post', post_id=post.id) }}" class="btn btn-outline btn-sm" title="Edit Story">
+                      ✏️
+                    </a>
+                    <form method="POST" action="{{ url_for('blog.delete_post', post_id=post.id) }}" onsubmit="return confirm('Delete this story permanently?');" style="display: inline;">
+                      <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Story">
+                        🗑️
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div style="padding: 1rem 0;">
+        {% include 'components/pagination.html' %}
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 4rem 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">✍️</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.5rem;">
+          No stories in this view
+        </h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">
+          {% if current_tab == 'drafts' %}
+            You don't have any drafts right now. Start a new idea anytime!
+          {% elif current_tab == 'published' %}
+            You haven't published any stories yet. Share your expertise with the world.
+          {% else %}
+            You haven't created any stories yet.
+          {% endif %}
+        </p>
+        <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary">Create Your First Story</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

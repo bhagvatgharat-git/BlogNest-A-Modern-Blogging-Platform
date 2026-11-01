@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}About BlogNest – Modern Blogging Platform{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 1.5rem 6rem; max-width: 900px;">
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 3.5rem;">
+    <div class="hero-pill">
+      <span class="hero-pill-dot"></span>
+      About The Platform
+    </div>
+    <h1 style="font-size: 2.75rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1rem; letter-spacing: -0.02em;">
+      A modern home for <span class="highlight">words that matter.</span>
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 650px; margin: 0 auto; line-height: 1.6;">
+      BlogNest is an internship-grade full-stack publishing platform engineered for simplicity, speed, and clean aesthetic reading.
+    </p>
+  </div>
+
+  <!-- Story & Vision -->
+  <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm); margin-bottom: 3rem;">
+    <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1rem;">
+      🎯 Project Philosophy
+    </h2>
+    <p style="color: var(--text-medium); font-size: 1.05rem; line-height: 1.75; margin-bottom: 1.5rem;">
+      Modern digital readers are overwhelmed with visual clutter, ads, and convoluted user flows. BlogNest strips away unnecessary noise in favor of a soothing <strong>Light Blue &amp; White</strong> aesthetic that prioritizes readability, typography, and author empowerment.
+    </p>
+    <p style="color: var(--text-medium); font-size: 1.05rem; line-height: 1.75;">
+      Every feature—from automatic reading time estimation to private draft controls and threaded discussions—has been carefully implemented following clean software engineering patterns.
+    </p>
+  </div>
+
+  <!-- Feature Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.75rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔒</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">Robust Security</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">
+        Werkzeug cryptographic password hashing, session cookies, and route protection with Flask-Login.
+      </p>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.75rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.75rem;">⏱️</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">Smart Reading Time</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">
+        Real-time word count calculation and automated reading estimation based on human reading speeds.
+      </p>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.75rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.75rem;">🛡️</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">Strict Privacy</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">
+        Drafts remain private to authors. Only the original author can edit or delete their respective stories.
+      </p>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.75rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.75rem;">💬</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark);">Community Dialogue</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">
+        Interactive commenting system with author badges and comment moderation controls.
+      </p>
+    </div>
+  </div>
+
+  <!-- Tech Specs -->
+  <div style="background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: var(--radius-lg); padding: 2.25rem; text-align: center;">
+    <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-900); margin-bottom: 0.5rem;">
+      Engineering Stack
+    </h3>
+    <p style="color: var(--primary-700); font-size: 0.95rem; margin-bottom: 1.5rem;">
+      Python Flask • Flask-SQLAlchemy • SQLite • Flask-Login • Jinja2 • Vanilla CSS3 Design System
+    </p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary">Start Exploring BlogNest</a>
+  </div>
+</div>
+{% endblock %}
