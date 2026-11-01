@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Create New Story – BlogNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2.5rem 1.5rem 5rem;">
+  <div class="form-card editor-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.25rem;">
+      <div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-dark);">Draft a New Story</h1>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
+          Express your ideas, share tutorials, or narrate experiences
+        </p>
+      </div>
+
+      <!-- Live Stats Pills -->
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <span class="btn btn-outline btn-sm" id="editorWordCount" style="pointer-events: none;">0 words</span>
+        <span class="btn btn-outline btn-sm" id="editorReadingTime" style="pointer-events: none; color: var(--primary-600);">1 min read</span>
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('blog.create_post') }}">
+      <!-- Post Title -->
+      <div class="form-group">
+        <label for="title" class="form-label">Story Title <span style="color: var(--danger);">*</span></label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          style="font-size: 1.25rem; font-weight: 700; padding: 0.85rem 1.1rem;" 
+          placeholder="e.g. Modern Web Architecture with Flask & SQLite" 
+          required 
+          autofocus
+        >
+      </div>
+
+      <!-- Category and Cover Image Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="category_id" class="form-label">Category / Topic</label>
+          <select id="category_id" name="category_id" class="form-control">
+            <option value="">Select a category (optional)</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="cover_image" class="form-label">Cover Image URL (Optional)</label>
+          <input 
+            type="url" 
+            id="cover_image" 
+            name="cover_image" 
+            class="form-control" 
+            placeholder="https://images.unsplash.com/photo-..."
+          >
+        </div>
+      </div>
+
+      <!-- Short Summary -->
+      <div class="form-group">
+        <label for="summary" class="form-label">Short Summary / Excerpt</label>
+        <textarea 
+          id="summary" 
+          name="summary" 
+          class="form-control" 
+          rows="2" 
+          placeholder="Brief 1-2 sentence overview shown in blog cards and social sharing..."
+        ></textarea>
+      </div>
+
+      <!-- Main Content -->
+      <div class="form-group">
+        <label for="postContentInput" class="form-label">Story Content <span style="color: var(--danger);">*</span></label>
+        <textarea 
+          id="postContentInput" 
+          name="content" 
+          class="form-control editor-textarea" 
+          placeholder="Write your article here. Paragraphs, thoughts, insights, code snippets..." 
+          required
+        ></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 2rem;">
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline">Cancel</a>
+        
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" name="action" value="draft" class="btn btn-outline" id="saveDraftBtn">
+            💾 Save as Draft
+          </button>
+          <button type="submit" name="action" value="publish" class="btn btn-primary" id="publishPostBtn">
+            🚀 Publish Now
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
